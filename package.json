@@ -3,8 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.9.1",
+    "mocha": "^3.5.3",
+    "nyc": "^12.0.2",
+    "sinon": "^5.1.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/nyc/bin/nyc.js --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha --recursive ./test && ./node_modules/nyc/bin/nyc.js report"
   },
   "keywords": [],
   "author": "",
