@@ -16,6 +16,14 @@ class Helper {
     return d;
   }
 
+  static getTomorrowDate() {
+    const todayDate = Helper.getLocalDate();
+    const date = new Date(todayDate);
+    date.setDate(date.getDate() + 1);
+
+    return date;
+  }
+
   static getLastDateOfTodayDate(todayDate) {
     if (!(todayDate instanceof Date)) throw new TypeError('todayDate');
 
@@ -29,6 +37,7 @@ class Helper {
 
 Helper.weekDay = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 Helper.KOREAN_LOCAL_HOUR = 9;
+Helper.mainMenuNames = ['오늘경기 일정', '지난경기 결과', '경기일정표'];
 
 
 module.exports = Helper;

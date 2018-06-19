@@ -54,31 +54,37 @@ module.exports = [
     date: new Date('2018-06-17 21:00:00'),
     group: group.E.name,
     nations: [group.E.nations.Costarica, group.E.nations.Seriba],
+    score: [0, 1],
   },
   {
     date: new Date('2018-06-18 00:00:00'),
     group: group.F.name,
     nations: [group.F.nations.Germany, group.F.nations.Mexico],
+    score: [0, 1],
   },
   {
     date: new Date('2018-06-18 03:00:00'),
     group: group.E.name,
     nations: [group.E.nations.Brazil, group.E.nations.Switzerland],
+    score: [1, 1],
   },
   {
     date: new Date('2018-06-18 21:00:00'),
     group: group.F.name,
     nations: [group.F.nations.Sweden, group.F.nations.Korea],
+    score: [1, 0],
   },
   {
     date: new Date('2018-06-19 00:00:00'),
     nations: [group.G.nations.Belguim, group.G.nations.Panama],
     group: group.G.name,
+    score: [3, 0],
   },
   {
     date: new Date('2018-06-19 03:00:00'),
     nations: [group.G.nations.Tunisia, group.G.nations.England],
     group: group.G.name,
+    score: [1, 2],
   },
   {
     date: new Date('2018-06-19 21:00:00'),
