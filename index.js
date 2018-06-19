@@ -5,9 +5,10 @@ const Menu = require('./router/menu');
 const TournamentService = require('./service/tournament');
 
 const tournamentService = new TournamentService(tournamentModel);
-const main = new MainController({ tournament: tournamentService });
-const sub = new SubController({ tournament: tournamentService });
-const menu = new Menu({ main, sub });
+const mainController = new MainController({ tournament: tournamentService });
+const subController = new SubController({ tournament: tournamentService });
+const menu = new Menu({ main : mainController, sub: subController });
+const main = async (event) => menu.getData(event.content);
 
 
-exports.handler = async (event) => menu.getData(event.content);
+exports.handler = main;

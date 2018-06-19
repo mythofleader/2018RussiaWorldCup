@@ -7,17 +7,20 @@ class Main {
     this.service = service;
   }
 
-  getTodayMatchInfo(todayDate = Helper.getLocalDate()) {
+  getTodayMatchInfo(todayStartDate = Helper.getTodayStartDate()) {
     let todayMatches;
-    let messageHeader = Helper.createDateSubMenu(todayDate) + ' 경기 일정\n';
+    let messageHeader = Helper.createDateSubMenu(todayStartDate) + ' 경기 일정\n';
     let messageBody;
 
-    const tomorrowDate = Helper.getTomorrowDate(todayDate);
-    if (!this.service.tournament.isFinish(todayDate)) {
-      todayMatches = this.service.tournament.getFromStartToEndDate(todayDate, tomorrowDate);
+    const todayLastDate = Helper.getTodayLastDate(todayStartDate);
+    if (!this.service.tournament.isFinish(todayStartDate)) {
+      todayMatches = this.service.tournament.getFromStartToEndDate(todayStartDate, todayLastDate);
     }
 
     if (todayMatches && todayMatches.length !== 0) {
+      const todayDate = Helper.getTodayDate();
+      const todayDateHour = todayDate.getHours();
+
       messageBody = todayMatches.map(todayMatch => {
         const rawMatchHour = todayMatch.date.getHours();
         const matchHour = rawMatchHour < 10 ? `0${rawMatchHour}` : rawMatchHour;
@@ -25,58 +28,26 @@ class Main {
         const group = todayMatch.group;
         const score = todayMatch.score;
 
-        return score
-          ? `${matchHour}시 ${group}조 ${nation1}(${score[0]}) vs ${nation2}(${score[1]})`
-          : `${matchHour}시 ${group}조 ${nation1} vs ${nation2}`
+        let message;
+        if (score) {
+          message = `${matchHour}시 ${group}조 ${nation1}(${score[0]}) vs ${nation2}(${score[1]})`;
+        } else {
+          const isPastMatchHour = todayDateHour >= matchHour;
+          const isDuringGame = (matchHour - todayDateHour) >= 0 && (matchHour - todayDateHour) < 2;
+          if (isPastMatchHour && isDuringGame) {
+            message = `${matchHour}시 ${group}조 ${nation1} vs ${nation2} (경기중)`;
+          } else {
+            message = `${matchHour}시 ${group}조 ${nation1} vs ${nation2}`;
+          }
+        }
+
+        return message;
       }).join('\n');
     } else {
       messageBody = '경기 일정이 없습니다.';
     }
 
     return Response.send(messageHeader + messageBody, Helper.mainMenuNames);
-  }
-
-  getLastMatchInfo(tomorrowStartDate = Helper.getTomorrowDate()) {
-    let messageBody;
-
-    const firstTournamentDate = this.service.tournament.getFirstDate();
-    const lastMatches = this.service.tournament.getFromStartToEndDate(firstTournamentDate, tomorrowStartDate);
-
-    if (lastMatches && lastMatches.length !== 0) {
-      const results = lastMatches
-        .filter(({ score }) => score !== null)
-        .map(lastMatch => {
-          const messageHeader = Helper.createDateSubMenu(lastMatch.date) + ' 경기 일정';
-          const rawMatchHour = lastMatch.date.getHours();
-          const matchHour = rawMatchHour < 10 ? `0${rawMatchHour}` : rawMatchHour;
-          const [nation1, nation2] = lastMatch.nations;
-          const group = lastMatch.group;
-          const score = lastMatch.score;
-
-          const messageBody = score
-            ? `${matchHour}시 ${group}조 ${nation1}(${score[0]}) vs ${nation2}(${score[1]})`
-            : `${matchHour}시 ${group}조 ${nation1} vs ${nation2}`;
-
-          return { messageHeader, messageBody };
-        })
-        .reduce((obj, { messageHeader, messageBody }) => {
-          if (obj.hasOwnProperty(messageHeader)) obj[messageHeader].push(messageBody);
-          else obj[messageHeader] = [messageBody];
-
-          return obj;
-        }, {});
-
-      const final = [];
-      for (const key of Object.keys(results)) {
-        final.push(key + '\n' + results[key].join('\n'))
-      }
-
-      messageBody = final.join('\n\n');
-    } else {
-      messageBody = '경기 결과가 없습니다.';
-    }
-
-    return Response.send(messageBody, Helper.mainMenuNames);
   }
 
   getMatchInfoBySubMenuDate(subMenuDate) {
@@ -104,10 +75,29 @@ class Main {
     return Response.send(results.join('\n'), Helper.mainMenuNames);
   }
 
-  getAllDates() {
-    const allDates = this.service.tournament.getAllDates();
+  getSubMenus() {
+    const menus = [].concat(Helper.subMenuNamesInMatchTables).concat(Helper.defaultMenuNames);
+    return Response.send('요일별 / 그룹별 선택해주세요', menus);
+  }
 
-    return Response.send('경기 날짜를 선택해주세요', [...new Set(allDates.map(date => Helper.createDateSubMenu(date)))]);
+  getDefaultMenus() {
+    return Response.send('원하시는 정보를 선택해 주세요.', Helper.mainMenuNames);
+  }
+
+  getLastMatchDates(todayLastDate = Helper.getTodayLastDate()) {
+    let results;
+
+    const firstTournamentDate = this.service.tournament.getFirstDate();
+    const lastMatches = this.service.tournament.getFromStartToEndDate(firstTournamentDate, todayLastDate);
+
+    if (lastMatches && lastMatches.length !== 0) {
+      results = lastMatches
+        .filter(({score}) => score !== null)
+        .map(lastMatch => Helper.createDateSubMenu(lastMatch.date))
+    }
+
+    if (results) return Response.send('경기 날짜를 선택해주세요', [...new Set(results), Helper.defaultMenuNames[0]]);
+    else return Response.send('지난 경기가 존재하지 않습니다.', Helper.mainMenuNames);
   }
 }
 

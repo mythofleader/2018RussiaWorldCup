@@ -11,6 +11,10 @@ class Tournament {
     return this.tournaments.map(tournament => tournament.date);
   }
 
+  getAllGroupNames() {
+    return this.tournaments.map(({ group }) => group);
+  }
+
   getByDate(date) {
     if (!(date instanceof Date)) throw new TypeError('date');
 
@@ -25,6 +29,12 @@ class Tournament {
 
     return this.tournaments
       .filter(({ date }) => date >= startDate && date < endDate)
+      .map(({ date, nations, group, score = null }) => ({ date, nations, group, score }));
+  }
+
+  getByGroupName(groupName) {
+    return this.tournaments
+      .filter(({ group }) => group === groupName)
       .map(({ date, nations, group, score = null }) => ({ date, nations, group, score }));
   }
 
