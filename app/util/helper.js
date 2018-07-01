@@ -3,12 +3,13 @@ class Helper {
   static convertKoreanDate(date) {
     if (!(date instanceof Date)) throw new TypeError('date');
 
-    const month = date.getMonth() + 1 > 9
+    const m = date.getMonth() + 1 > 9
       ? date.getMonth() + 1
       : `0${date.getMonth() + 1}`;
+    const d = date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`;
 
-    const koreanMonth = `${month}월`;
-    const koreanDate = `${date.getDate()}일`;
+    const koreanMonth = `${m}월`;
+    const koreanDate = `${d}일`;
     const koreanDayOfWeek = Helper.weekDay[date.getDay()];
 
     return `${koreanMonth} ${koreanDate} ${koreanDayOfWeek}`;

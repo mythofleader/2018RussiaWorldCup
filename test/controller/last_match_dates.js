@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const LastMatchDatesController = require('../../app/controller/last_match_dates');
+const LastMatchDatesController = require('../../app/controller/tournament_last_match_dates');
 const TournamentModelData = require('../../app/model/data/tournament');
 const TournamentModel = require('../../app/model/tournament');
 const Helper = require('../../app/util/helper');

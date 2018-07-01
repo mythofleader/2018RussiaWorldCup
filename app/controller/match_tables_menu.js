@@ -4,8 +4,8 @@ const Helper = require('../util/helper');
 class MatchTablesMenuController {
   constructor(view) {
     this.view = view;
-    this.menus = ['요일별', '그룹별'].concat(Helper.defaultMenuNames);
-    this.message = '요일별 / 그룹별 선택해주세요.';
+    this.menus = ['16강','요일별', '그룹별'].concat(Helper.defaultMenuNames);
+    this.message = '원하시는 정보를 선택해주세요.';
   }
 
   getMenus() {
