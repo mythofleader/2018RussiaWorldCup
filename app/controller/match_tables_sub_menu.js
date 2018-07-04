@@ -7,7 +7,7 @@ class MatchTablesSubMenu {
     this.model = model;
     this.message = {
       dates: '경기 날짜를 선택해주세요.',
-      group: '토너먼트 그룹을 선택해 주세요.',
+      group: '그룹을 선택해 주세요.',
     };
   }
 
