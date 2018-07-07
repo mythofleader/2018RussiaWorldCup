@@ -11,7 +11,9 @@ class TodayMatchController {
   getAllMatches(todayStartDate = Helper.getTodayStartDate()) {
     const tomorrowStartDate = Helper.getTomorrowStartDate(todayStartDate);
     let todayMatches = this._getTournamentMatches(todayStartDate, tomorrowStartDate);
-    if (!todayMatches) todayMatches = this._getRound15Matches(todayStartDate, tomorrowStartDate);
+    if (!todayMatches) todayMatches = this._getRound16Matches(todayStartDate, tomorrowStartDate);
+    if (!todayMatches) todayMatches = this._getRound8Matches(todayStartDate, tomorrowStartDate);
+    if (!todayMatches) todayMatches = this.message.notExist;
 
     const messageHeader = Helper.convertKoreanDate(todayStartDate) + ' 경기 일정\n\n';
     const message = messageHeader + todayMatches;
@@ -58,7 +60,7 @@ class TodayMatchController {
     }).join('\n');
   }
 
-  _getRound15Matches(todayStartDate, tomorrowStartDate) {
+  _getRound16Matches(todayStartDate, tomorrowStartDate) {
     const todayMatches = this.model.round16.isFinish(todayStartDate)
       ? []
       : this.model.round16.getFromStartToEndDate(todayStartDate, tomorrowStartDate);
@@ -79,6 +81,43 @@ class TodayMatchController {
       const highlight = todayMatch.highlight;
 
       const header = `${matchHour}시 16강\n`;
+      const bottom = highlight ? `${highlight}\n` : '';
+
+      const interval = todayMatch.date.getTime() - now.getTime();
+      const min = Math.floor(interval / Helper.msecPerMinute);
+
+      let body = score ? `${nation1}(${score[0]}) vs ${nation2}(${score[1]})` : `${nation1} vs ${nation2}`;
+      if (min > 0) body += ` (경기전)\n`;
+      else {
+        if (Math.abs(min) < 115) body += ` (경기중)\n`;
+        else body += ` (경기종료)\n`;
+      }
+
+      return header + body + bottom;
+    }).join('\n');
+  }
+
+  _getRound8Matches(todayStartDate, tomorrowStartDate) {
+    const todayMatches = this.model.round8.isFinish(todayStartDate)
+      ? []
+      : this.model.round8.getFromStartToEndDate(todayStartDate, tomorrowStartDate);
+
+    return todayMatches.length === 0
+      ? null
+      : TodayMatchController.createRound8ViewData(todayMatches);
+  }
+
+  static createRound8ViewData(todayMatches) {
+    const now = Helper.getTodayDate();
+
+    return todayMatches.map(todayMatch => {
+      const rawMatchHour = todayMatch.date.getHours();
+      const matchHour = rawMatchHour < 10 ? `0${rawMatchHour}` : rawMatchHour;
+      const [nation1, nation2] = todayMatch.nations;
+      const score = todayMatch.score;
+      const highlight = todayMatch.highlight;
+
+      const header = `${matchHour}시 8강\n`;
       const bottom = highlight ? `${highlight}\n` : '';
 
       const interval = todayMatch.date.getTime() - now.getTime();

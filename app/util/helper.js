@@ -37,7 +37,7 @@ class Helper {
 
 Helper.weekDay = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 Helper.KOREAN_LOCAL_HOUR = 9;
-Helper.mainMenuNames = ['오늘경기 일정', '지난경기 결과', '경기일정표'];
+Helper.mainMenuNames = ['국가별 하이라이트', '오늘경기 일정', '지난경기 결과', '경기일정표'];
 Helper.subMenuNamesInMatchTables = ['요일별', '그룹별'];
 Helper.defaultMenuNames = ['처음으로'];
 Helper.localHour = 9;
