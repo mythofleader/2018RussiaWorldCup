@@ -4,9 +4,11 @@ const LastMatchResultMenu = require('./app/controller/last_match_menu');
 const MatchTablesDateController = require('./app/controller/match_tables_date');
 const MatchTablesGroupController = require('./app/controller/match_tables_group');
 const MatchTablesMenuController = require('./app/controller/match_tables_menu');
+const MatchTablesRound4Controller = require('./app/controller/match_tables_round4');
 const MatchTablesRound8Controller = require('./app/controller/match_tables_round8');
 const MatchTablesRound16Controller = require('./app/controller/match_tables_round16');
 const MatchTablesSubMenuController = require('./app/controller/match_tables_sub_menu');
+const Round4LastMatchDatesController = require('./app/controller/round4_last_match_dates');
 const Round8LastMatchDatesController = require('./app/controller/round8_last_match_dates');
 const Round16LastMatchDatesController = require('./app/controller/round16_last_match_dates');
 const TodayMatchController = require('./app/controller/today_match');
@@ -18,23 +20,28 @@ const Round16Data = require('./app/model/data/round16');
 const Round16Model = require('./app/model/round16');
 const Round8Data = require('./app/model/data/round8');
 const Round8Model = require('./app/model/round8');
+const Round4Data = require('./app/model/data/round4');
+const Round4Model = require('./app/model/round4');
 const Router = require('./app/router');
 const KaKaoTalkPlusView = require('./app/view/kakao');
 
 const tournament = new TournamentModel(TournamentData);
 const round16 = new Round16Model(Round16Data);
 const round8 = new Round8Model(Round8Data);
-const model = { tournament, round16, round8 };
+const round4 = new Round4Model(Round4Data);
+const model = { tournament, round16, round8, round4 };
 const view = new KaKaoTalkPlusView();
 const defaultMenu = new DefaultMenuController(view);
 const highLights = new HighLightsController(view);
 const lastMatchResultMenu = new LastMatchResultMenu(view);
 const matchTablesDate = new MatchTablesDateController(view, model);
 const matchTablesGroup = new MatchTablesGroupController(view, model);
+const matchTablesRound4 = new MatchTablesRound4Controller(view, model);
 const matchTablesRound8 = new MatchTablesRound8Controller(view, model);
 const matchTablesRound16 = new MatchTablesRound16Controller(view, model);
 const matchTablesMenu = new MatchTablesMenuController(view);
 const matchTablesSubMenu = new MatchTablesSubMenuController(view, model);
+const round4LastMatchDates = new Round4LastMatchDatesController(view, model);
 const round8LastMatchDates = new Round8LastMatchDatesController(view, model);
 const round16LastMatchDates = new Round16LastMatchDatesController(view, model);
 const todayMatch = new TodayMatchController(view, model);
@@ -43,7 +50,7 @@ const tournamentLastMatchDates = new TournamentLastMatchDatesController(view, mo
 const controller = {
   defaultMenu, lastMatchResultMenu, matchTablesDate, matchTablesGroup, matchTablesRound16,
   matchTablesMenu, matchTablesSubMenu, round16LastMatchDates, todayMatch, tournamentLastMatchDates,
-  matchTablesRound8, round8LastMatchDates, highLights,
+  matchTablesRound8, round8LastMatchDates, highLights, matchTablesRound4, round4LastMatchDates,
 };
 
 const router = new Router(controller);

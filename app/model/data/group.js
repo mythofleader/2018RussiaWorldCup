@@ -50,7 +50,7 @@ module.exports = {
       Germany: '독일',
       Mexico: '멕시코',
       Sweden: '스웨덴',
-      Korea: '한국',
+      Korea: '대한민국',
     },
   },
   G: {

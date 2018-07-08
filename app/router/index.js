@@ -13,11 +13,13 @@ class Router {
     else if (path === '조별리그 결과') return this.controller.tournamentLastMatchDates.getAllDates();
     else if (path === '16강 결과') return this.controller.round16LastMatchDates.getAllDates();
     else if (path === '8강 결과') return this.controller.round8LastMatchDates.getAllDates();
+    else if (path === '4강 결과') return this.controller.round4LastMatchDates.getAllDates();
     else if (path === '경기일정표') return this.controller.matchTablesMenu.getMenus();
     else if (path === '요일별') return this.controller.matchTablesSubMenu.getAllMatchDates();
     else if (path === '그룹별') return this.controller.matchTablesSubMenu.getAllMatchGroups();
     else if (path === '16강') return this.controller.matchTablesRound16.getAllMatches();
     else if (path === '8강') return this.controller.matchTablesRound8.getAllMatches();
+    else if (path === '4강') return this.controller.matchTablesRound4.getAllMatches();
     else if (Helper.dateExp.test(path)) return this.controller.matchTablesDate.getMatchByDate(path);
     else if (Helper.expCapitalOneLetterExp.test(path)) return this.controller.matchTablesGroup.getMatchByGroup(path);
     else if (this.controller.highLights.hasNation(path)) return this.controller.highLights.getByNation(path);
